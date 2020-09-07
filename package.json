@@ -1,0 +1,25 @@
+{
+	"name": "my-image-repo",
+	"version": "1.0.0",
+	"description": "An basic image-repo exercise in systems development/design",
+	"main": "server.js",
+	"scripts": {
+		"server": "nodemon server.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Madhav",
+	"license": "ISC",
+	"dependencies": {
+		"bcrypt": "^5.0.0",
+		"cloudinary": "^1.23.0",
+		"config": "^3.3.1",
+		"express": "^4.17.1",
+		"jsonwebtoken": "^8.5.1",
+		"mongoose": "^5.10.3",
+		"multer": "^1.4.2",
+		"multer-storage-cloudinary": "^4.0.0"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.4"
+	}
+}
