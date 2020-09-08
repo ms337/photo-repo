@@ -61,17 +61,4 @@ router.post("/", (req, res) => {
 	});
 });
 
-//Getting current activated user data
-//@route GET api/auth/user
-//@access Private, uses token in header
-
-// router.get("/user", auth, (req, res) => {
-// 	User.findById(req.user.id)
-// 		.select("-password")
-// 		.then((user) => {
-// 			res.json(user);
-// 		})
-// 		.catch((err) => res.status(400).message({ message: "Could not get user." }));
-// });
-
 module.exports = router;

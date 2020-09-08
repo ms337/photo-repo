@@ -6,7 +6,6 @@ const login = require("./routes/api/login");
 const images = require("./routes/api/image");
 
 const Queue = require("bull");
-const testUserQueue = new Queue("test-user-queue");
 
 //Setting up cached queue
 

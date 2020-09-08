@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
-const Queue = require("bull");
-const testUserQueue = new Queue("test-user-queue");
+const config = require("config");
 
 const auth = require("../../middleware/auth");
 
@@ -15,11 +13,12 @@ const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const { route } = require("./login");
 
+//This should be gotten from config
 cloudinary.config({
 	//using existing cloud storage, can also connect straight to S3 or GCP Cloud Storage
-	cloud_name: "texchange",
-	api_key: 852474873596592,
-	api_secret: "Jb2scvfgedVSMn17DphW05GJFQc",
+	cloud_name: config.get("cloud_name"),
+	api_key: config.get("api_key"),
+	api_secret: config.get("api_secret"),
 });
 
 const storage = new CloudinaryStorage({
@@ -32,8 +31,24 @@ const storage = new CloudinaryStorage({
 
 const parser = multer({ storage: storage });
 
-router.get("/recents", auth, (req, res) => {
-	const { user } = req.body;
+router.get("/public", (req, res) => {
+	Image.find({ private: false })
+		.then((images) => {
+			let urls = Array();
+			images.forEach((image) => urls.push(image.imageURL));
+			res.status(200).json({ urls: urls });
+		})
+		.catch((err) => {
+			console.log(err);
+			console.log("Could not get images");
+		});
+});
+
+router.get("/authenticated", auth, (req, res) => {
+	console.log(req.user.id);
+	Image.find({ $or: [{ private: false }, { owner: req.user.id }] })
+		.then((images) => res.json(images))
+		.catch((err) => console.log("Could not get images"));
 });
 
 router.post("/uploadFile", auth, parser.single("file"), (req, res) => {
