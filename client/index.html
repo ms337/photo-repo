@@ -3,24 +3,22 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>Photorepo</title>
-		<script src="script.js"></script>
 	</head>
 	<body>
 		<!--  SINGLE FILE -->
-		<form action="/images/uploadfile" enctype="multipart/form-data" method="POST">
-			<input type="file" name="file" />
-			<input type="submit" value="Upload a file" />
-		</form>
+		<div>
+			<form action="/images/uploadfile" enctype="multipart/form-data" method="POST">
+				<input type="file" name="file" />
+				<input type="submit" value="Upload a file" />
+			</form>
+		</div>
 
 		<!-- MULTIPLE FILES -->
-
-		<form action="/images/uploadFiles" enctype="multipart/form-data" method="POST">
-			Select images: <input type="file" name="files" multiple />
-			<input type="submit" value="Upload your files" />
-		</form>
-
 		<div>
-			<div id="gallery"></div>
+			<form action="/images/uploadFiles" enctype="multipart/form-data" method="POST">
+				Select images: <input type="file" name="files" multiple />
+				<input type="submit" value="Upload your files" />
+			</form>
 		</div>
 	</body>
 </html>

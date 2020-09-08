@@ -47,8 +47,15 @@ router.get("/public", (req, res) => {
 router.get("/authenticated", auth, (req, res) => {
 	console.log(req.user.id);
 	Image.find({ $or: [{ private: false }, { owner: req.user.id }] })
-		.then((images) => res.json(images))
-		.catch((err) => console.log("Could not get images"));
+		.then((images) => {
+			let urls = Array();
+			images.forEach((image) => urls.push(image.imageURL));
+			res.status(200).json({ urls: urls });
+		})
+		.catch((err) => {
+			console.log(err);
+			console.log("Could not get images");
+		});
 });
 
 router.post("/uploadFile", auth, parser.single("file"), (req, res) => {
