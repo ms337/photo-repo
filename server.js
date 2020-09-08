@@ -5,6 +5,11 @@ const config = require("config");
 const login = require("./routes/api/login");
 const images = require("./routes/api/image");
 
+const Queue = require("bull");
+const testUserQueue = new Queue("test-user-queue");
+
+//Setting up cached queue
+
 const app = express();
 app.use(express.json());
 
@@ -17,15 +22,11 @@ mongoose
 
 //Routes
 app.use("/api/login", login);
-app.use("/api/image", images);
+app.use("/api/images", images);
 
-//Serve static assets for client in production
-if (process.env.NODE_ENV === "production") {
-	app.use(express.static("client/build"));
-	app.get("*", (request, reponse) => {
-		reponse.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-	});
-}
+app.get("/", (req, res) => {
+	res.sendFile(__dirname + "/client/index.html");
+});
 
 //Setup port and run server
 const port = process.env.PORT || 5000;

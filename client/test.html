@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+</body>
+<script type="text/javascript">
+var isProcessPending = false; // for stop multiple request simultaneously
+var recordsPerPage = 20; // you can set as you want to get data per ajax request
+var recordsOffset = 0; // get data from given no
+var recordsTotal = 0; // store total number of record
+var article_list = [];
+//get first time article as page load
+loadArticle({ action: "initialization" });
+function loadArticle(params) {
+    if (!!params && params.action === "VIEW_MORE") {
+        recordsOffset = recordsOffset + recordsPerPage;
+    }
+    $.ajax({
+        url: "/api/article/get",
+        type: "get", //send it through get method
+        data: {
+            recordsPerPage: recordsPerPage,
+            recordsOffset: recordsOffset
+        },
+        success: function(response) {
+            //Do Something
+            isProcessPending = false; // for make process done so new data can be get on scroll
+            if (!!params && params.action === "VIEW_MORE") {
+                article_list = article_list.concat(response.data.article_list);
+            } else {
+                if (recordsOffset === 0) {
+                    article_list = response.data.article_list;
+                    recordsTotal = response.data.recordsTotal;
+                }
+            }
+            console.log("article list");
+            console.log(article_list); // form this you can append or manage html as you want
+        },
+        error: function(xhr) {
+            //Do Something to handle error
+            isProcessPending = false; // for make process done so new data can be get on scroll
+        }
+    });
+}
+//on scroll new get data
+$(window).scroll(function() {
+    var scrollPercent = Math.round(($(window).scrollTop()) / ($(document).height() - $(window).height()) * 100);
+    // get new data only if scroll bar is greater 70% of screen
+    if (scrollPercent > 70) {
+        //this condition only satisfy ony one pending ajax completed and records offset is less than  total record
+        if (isProcessPending === false && recordsOffset < recordsTotal) {
+            isProcessPending = true;
+            loadArticle({ action: "VIEW_MORE" });
+        }
+    }
+});
+</script>
+</body>
+</html>
