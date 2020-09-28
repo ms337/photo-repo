@@ -2,7 +2,7 @@
 
 ## Proposed Architecture for Adding Images and Search
 
-### //Could not implement Search
+### TODO: implement Search
 
 ![](add_search_arch.png)
 
